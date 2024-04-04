@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            text-align: center;
+        }
+
+        td {
+            font-family: 'Courier New', Courier, monospace; 
+            font-weight: 900;
+            width: 10px; /* Set a fixed width for the cells */
+            height: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+</body>
+<script>
+    // GAME STATE ========================================================
+    let currentRow = 0
+    let currentCell = 0
+
+    const gameBoard = [
+        [null, 2, 7, 9, 6, null, null, null, null ],
+        [null, null, null, 2, null, null, 4, null, null ],
+        [3, null, 1, null, 5, null, null, 6, null ],
+        [null, 3, null, null, 1, null, null, null, null ],
+        [2, null, 9, null, null, null, 5, null, 4 ],
+        [null, null, null, 5, null, null, null, 2, 3 ],
+        [1, 9, 8, 6, null, 5, null, 7, 2 ],
+        [null, null, null, 1, null, 7, 9, null, null ],
+        [null, 5, 2, 8, null, 3, 1, 4, 6 ]
+    ]
+
+    // FUNCTIONS =========================================================
+    function calculateColor(x, y) {
+        if (y >= 0 && y <= 2) {
+            if (x >= 0 && x <= 2 || x >= 6 && x <= 8) {
+                return "lightgray";
+            }
+        }
+        if (y >= 6 && y <= 8) {
+            if (x >= 0 && x <= 2 || x >= 6 && x <= 8) {
+                return "lightgray";
+            }
+        }
+        if (y >= 3 && y <= 5) {
+            if (x >= 3 && x <= 5 || x >= 3 && x <= 5) {
+                return "lightgray";
+            }
+        }
+    }
+
+    function isNumberUsedInRow(game, rowNumber, cellNumber, number) {
+        if (!number) {
+            return false
+        }
+
+        const row = game[rowNumber]
+
+        for (let i = 0; i < 9; i++) {
+            if (i != cellNumber && row[i] === number) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    function getColumn(game, columnNumber) {
+        // iterate over each row from 0 to 8
+        // take the cell numbered "columnNumber" from each row.
+        // add the result to the result array.
+        // return the result
+        const result = []
+        return game.map(row => row[columnNumber])
+
+        return result
+
+    }
+
+    function isNumberUsedInColumn(game, columnNumber, cellNumber, number) {
+        if (!number) {
+            return false
+        }
+
+        const column = getColumn(game, columnNumber)
+
+        for (let i = 0; i < 9; i++) {
+            if (i != cellNumber && column[i] === number) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    function renderBoard(gameBoard) {
+        const container = document.getElementById('container')
+        container.innerHTML = ''
+
+        const table = document.createElement('table', { border: '2' }) 
+        table.border = "2"
+        table.cellPadding = "35"
+        table.cellSpacing = "0.5"
+
+        for (let y = 0; y < gameBoard.length; y++) {
+            const tr = document.createElement('tr')
+            for (let x = 0; x < 9; x++) {
+                const td = document.createElement('td')
+                td.style.backgroundColor = calculateColor(x, y);
+
+                const cellValue = gameBoard[y][x]
+                if (cellValue) {
+                    td.innerText = cellValue ? cellValue : "&nbsp;";
+                }
+
+                if (y === currentRow && x === currentCell) {
+                    td.style.backgroundColor = 'darkgray'
+                }
+
+                if (isNumberUsedInRow(gameBoard, y, x, cellValue) || isNumberUsedInColumn(gameBoard, x, y, cellValue)) {
+                    // td.style.color = 'red'
+                    td.style.backgroundColor = 'red'
+                }
+
+                tr.appendChild(td)
+            }
+            table.appendChild(tr)
+        }
+
+        container.appendChild(table)
+
+    }
+
+    function generateRow(rowTemplate) {
+        const newRow = rowTemplate.map(item => {
+            const newItem = {...item}
+            return newItem
+        })
+
+        return [...newRow]
+    }
+
+
+
+    // const gameBoardTwo = [
+    //     [null, null, 7, 4, 9, 1, 6, null, 5 ],
+    //     [2, null, null, null, 6, null, 3, null, 9 ],
+    //     [null, null, null, null, null, 7, null, 1, null ],
+    //     [null, 5, 8, 6, null, null, null, null, 4 ],
+    //     [null, null, 3, null, null, null, null, 9, null ],
+    //     [null, null, 6, 2, null, null, 1, 8, 7 ],
+    //     [9, null, 4, null, 7, null, null, null, 2 ],
+    //     [6, 7, null, 8, 3, null, null, null, null ],
+    //     [8, 1, null, null, 4, 5, null, null, null ]
+    // ]
+
+    renderBoard(gameBoard)
+
+    document.addEventListener('keydown', (e) => {
+        const keyPressed = e.key;
+
+        if (keyPressed === "ArrowUp") {
+            currentRow--
+        }
+
+        else if (keyPressed === "ArrowDown") {
+            currentRow++
+        }
+
+        else if (keyPressed === "ArrowLeft") {
+            currentCell--
+        }
+
+        else if (keyPressed === "ArrowRight") {
+            currentCell++
+        }
+
+        if (currentCell > 8 ) {
+            currentCell = 8
+        }
+        else if (currentCell < 0) {
+            currentCell = 0
+        }
+        if (currentRow > 8) {
+            currentRow = 8
+        }
+        else if (currentRow < 0) {
+            currentRow = 0
+        }
+
+        debugger;
+
+        const cellValue = gameBoard[currentRow][currentCell]
+        const goodInputNumber = !isNaN(keyPressed) && keyPressed != 0
+        const usedInRow = isNumberUsedInRow(gameBoard, currentRow, currentCell, cellValue)
+        const usedInCol = isNumberUsedInColumn(gameBoard, currentCell, currentRow, cellValue)
+        const alreadyUsed = usedInRow || usedInCol
+
+        if (goodInputNumber && (alreadyUsed || !cellValue)) {
+            gameBoard[currentRow][currentCell] = parseInt(keyPressed);
+            console.log(keyPressed)
+        }
+
+        renderBoard(gameBoard);
+    });
+
+
+    //TODO: to find duplicates for squares, find what square ur in. (to find squares, divide by 3)
+    // find where you are in the square and the treat it as a row/column (the same code.)
+</script>
+</html>         
+
