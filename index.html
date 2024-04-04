@@ -207,15 +207,13 @@
             currentRow = 0
         }
 
-        debugger;
-
         const cellValue = gameBoard[currentRow][currentCell]
         const goodInputNumber = !isNaN(keyPressed) && keyPressed != 0
         const usedInRow = isNumberUsedInRow(gameBoard, currentRow, currentCell, cellValue)
         const usedInCol = isNumberUsedInColumn(gameBoard, currentCell, currentRow, cellValue)
         const alreadyUsed = usedInRow || usedInCol
 
-        if (goodInputNumber && (alreadyUsed || !cellValue)) {
+        if (goodInputNumber) {
             gameBoard[currentRow][currentCell] = parseInt(keyPressed);
             console.log(keyPressed)
         }
