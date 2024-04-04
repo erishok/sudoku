@@ -37,7 +37,7 @@
     let currentRow = 0
     let currentCell = 0
 
-    const gameBoard = [
+    const initialGameBoard = [
         [null, 2, 7, 9, 6, null, null, null, null ],
         [null, null, null, 2, null, null, 4, null, null ],
         [3, null, 1, null, 5, null, null, 6, null ],
@@ -48,6 +48,8 @@
         [null, null, null, 1, null, 7, 9, null, null ],
         [null, 5, 2, 8, null, 3, 1, 4, 6 ]
     ]
+
+    const gameBoard = JSON.parse(JSON.stringify(initialGameBoard));
 
     // FUNCTIONS =========================================================
     function calculateColor(x, y) {
@@ -211,9 +213,9 @@
         const goodInputNumber = !isNaN(keyPressed) && keyPressed != 0
         const usedInRow = isNumberUsedInRow(gameBoard, currentRow, currentCell, cellValue)
         const usedInCol = isNumberUsedInColumn(gameBoard, currentCell, currentRow, cellValue)
-        const alreadyUsed = usedInRow || usedInCol
+        const initialCellValue = initialGameBoard[currentRow][currentCell]
 
-        if (goodInputNumber) {
+        if (goodInputNumber && !initialCellValue) {
             gameBoard[currentRow][currentCell] = parseInt(keyPressed);
             console.log(keyPressed)
         }
