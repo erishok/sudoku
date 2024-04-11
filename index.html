@@ -134,18 +134,13 @@
                     td.innerText = cellValue ? cellValue : "&nbsp;";
                 }
 
-
                 let isCursorInCell = false
                 let isValueDuplicate = false
-
 
                 if (y === currentRow && x === currentCell) {
                     isCursorInCell = true
                     td.style.backgroundColor = 'gray'
                 }
-
-                // td.style.backgroundColor = 'darkgray'
-                //make the color be darker on red. 
 
                 if (isNumberUsedInRow(gameBoard, y, x, cellValue) || isNumberUsedInColumn(gameBoard, x, y, cellValue)) {
                     // td.style.color = 'red'
@@ -154,13 +149,8 @@
                 }
 
                 if (isCursorInCell && isValueDuplicate) {
-                    // alert("isCursorInCell && isValueDuplicate")
                     td.style.backgroundColor = 'darkred'
                 }
-
-
-                
-            
 
                 tr.appendChild(td)
             }
@@ -180,19 +170,6 @@
         return [...newRow]
     }
 
-
-
-    // const gameBoardTwo = [
-    //     [null, null, 7, 4, 9, 1, 6, null, 5 ],
-    //     [2, null, null, null, 6, null, 3, null, 9 ],
-    //     [null, null, null, null, null, 7, null, 1, null ],
-    //     [null, 5, 8, 6, null, null, null, null, 4 ],
-    //     [null, null, 3, null, null, null, null, 9, null ],
-    //     [null, null, 6, 2, null, null, 1, 8, 7 ],
-    //     [9, null, 4, null, 7, null, null, null, 2 ],
-    //     [6, 7, null, 8, 3, null, null, null, null ],
-    //     [8, 1, null, null, 4, 5, null, null, null ]
-    // ]
 
     renderBoard(gameBoard)
 
