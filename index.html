@@ -134,14 +134,33 @@
                     td.innerText = cellValue ? cellValue : "&nbsp;";
                 }
 
+
+                let isCursorInCell = false
+                let isValueDuplicate = false
+
+
                 if (y === currentRow && x === currentCell) {
-                    td.style.backgroundColor = 'darkgray'
+                    isCursorInCell = true
+                    td.style.backgroundColor = 'gray'
                 }
+
+                // td.style.backgroundColor = 'darkgray'
+                //make the color be darker on red. 
 
                 if (isNumberUsedInRow(gameBoard, y, x, cellValue) || isNumberUsedInColumn(gameBoard, x, y, cellValue)) {
                     // td.style.color = 'red'
+                    isValueDuplicate = true
                     td.style.backgroundColor = 'red'
                 }
+
+                if (isCursorInCell && isValueDuplicate) {
+                    // alert("isCursorInCell && isValueDuplicate")
+                    td.style.backgroundColor = 'darkred'
+                }
+
+
+                
+            
 
                 tr.appendChild(td)
             }
